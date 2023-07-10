@@ -2,9 +2,12 @@
 import { useSpeech } from '@/composables/useSpeech.js'
 
 import RecordingSection from './components/RecordingSection.vue';
+import InputArea from './components/InputArea.vue';
 
 const {
-  isListening
+  isListening,
+  speech,
+  getInputArea
 } = useSpeech()
 </script>
 
@@ -13,7 +16,7 @@ const {
   <RecordingSection :isListening="isListening" />
   <h1>Speech color changer</h1>
   <p>Tap/click then say a color to change the background color of the app.</p>
-  <div class="hints"></div>
+  <InputArea :text="speech" :ref="getInputArea"/>
   <div>
     <p class="output"><em>…diagnostic messages</em></p>
   </div>

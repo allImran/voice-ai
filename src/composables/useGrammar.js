@@ -1,10 +1,10 @@
 const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
 
 const colors = [
-    "aqua",
-    "azure",
-    "beige",
-    "bisque",
+    "abdul",
+    "nitai",
+    "amar",
+    "nama",
     "black",
     "blue",
     "brown",

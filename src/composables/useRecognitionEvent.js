@@ -1,7 +1,6 @@
-export const useRecognitionEvent = (recognition,controls) => {
+export const useRecognitionEvent = (recognition, controls) => {
 
-    const  {
-        bg,
+    const {
         diagnostic,
         speech,
         isListening,
@@ -13,13 +12,15 @@ export const useRecognitionEvent = (recognition,controls) => {
 
     recognition.onaudioend = () => isListening.value = false
 
-    recognition.onresult = (event) => {
-        console.log(event.results)
-        const color = event.results[0][0].transcript;
-        diagnostic.textContent = `Result received: ${color}.`;
-        bg.style.backgroundColor = color;
-        console.log(`Confidence: ${event.results[0][0].confidence}`);
-    };
+    recognition.onresult = (event) => handleResults(event.results)
+
+    const handleResults = (results) => {
+        const text = Array.from(results)
+            .map(item => item[0])
+            .map(item => item.transcript)
+            .join(' ')
+        speech.value = text || ''
+    }
 
     recognition.onnomatch = (event) => {
         diagnostic.textContent = "I didn't recognize that color.";

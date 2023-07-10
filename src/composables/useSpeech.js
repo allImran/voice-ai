@@ -1,16 +1,18 @@
 import { ref, onMounted } from 'vue'
-import useGrammar from './useGrammar'
 import useRecognition from './useRecognition'
+import useGrammar from './useGrammar'
 import { useRecognitionEvent } from './useRecognitionEvent'
 
 export const useSpeech = () => {
     const isListening = ref(false)
     const speech = ref('')
     const conversations = ref('')
+    const inputArea = ref(null)
 
+    const getInputArea = (dom) => inputArea.value = dom
     const { speechRecognitionList } = useGrammar()
     const { recognition } = useRecognition()
-    recognition.grammars = speechRecognitionList;
+    recognition.grammars = speechRecognitionList
 
     const startListening = () => {
         recognition.start();
@@ -24,13 +26,8 @@ export const useSpeech = () => {
 
     onMounted(() => {
         const diagnostic = document.querySelector(".output");
-        const bg = document.querySelector(".body");
-        const hints = document.querySelector(".hints");
-
-        hints.innerHTML = `Tap or click then say a color to change the background color of the app`;
 
         useRecognitionEvent(recognition, {
-            bg,
             diagnostic,
             isListening,
             speech,
@@ -44,6 +41,8 @@ export const useSpeech = () => {
     })
 
     return {
-        isListening
+        isListening,
+        getInputArea,
+        speech
     }
 }
