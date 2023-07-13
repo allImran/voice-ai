@@ -5,8 +5,10 @@ import { useRecognitionEvent } from './useRecognitionEvent'
 
 export const useSpeech = () => {
     const isListening = ref(false)
+    const isFetching = ref(false)
+    const isFinished = ref(true)
     const speech = ref('')
-    const conversations = ref('')
+    const conversations = ref([])
     const inputArea = ref(null)
 
     const getInputArea = (dom) => inputArea.value = dom
@@ -15,6 +17,7 @@ export const useSpeech = () => {
     recognition.grammars = speechRecognitionList
 
     const startListening = () => {
+        isFinished.value = true
         recognition.start();
     }
     const stopListening = (clear=false) => {
@@ -30,6 +33,8 @@ export const useSpeech = () => {
         useRecognitionEvent(recognition, {
             diagnostic,
             isListening,
+            isFinished,
+            isFetching,
             speech,
             conversations,
             startListening
@@ -43,6 +48,7 @@ export const useSpeech = () => {
     return {
         isListening,
         getInputArea,
-        speech
+        speech,
+        conversations
     }
 }

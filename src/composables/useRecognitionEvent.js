@@ -5,12 +5,15 @@ export const useRecognitionEvent = (recognition, controls) => {
         speech,
         isListening,
         conversations,
-        startListening
+        startListening,
+        isFinished
     } = controls
 
     recognition.onaudiostart = () => isListening.value = true
 
-    recognition.onaudioend = () => isListening.value = false
+    recognition.onaudioend = () => {
+        isListening.value = false
+    }
 
     recognition.onresult = (event) => handleResults(event.results)
 
@@ -19,7 +22,31 @@ export const useRecognitionEvent = (recognition, controls) => {
             .map(item => item[0])
             .map(item => item.transcript)
             .join(' ')
-        speech.value = text || ''
+        speech.value += text || ''
+
+        checkInstructions(speech.value)
+    }
+
+    const checkInstructions = (text) => {
+        if (text.toLowerCase().includes('hello alpha')) {
+            isFinished.value = false
+            speech.value = ''
+            recognition.stop()
+            
+            conversations.value.push({
+                type: 'user',
+                text
+            })
+
+            conversations.value.push({
+                type: 'assistant',
+                text: 'How can I help you?'
+            })
+
+            setTimeout(() => {
+                startListening()
+            }, 900);
+        }
     }
 
     recognition.onnomatch = (event) => {
